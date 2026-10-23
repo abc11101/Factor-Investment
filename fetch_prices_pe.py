@@ -2,7 +2,7 @@
 Retrieve stock prices and P/E ratios with yfinance.
 
 Usage:
-  python fetch_prices_pe.py                      # default tickers
+  python fetch_prices_pe.py                      # prompts for tickers/period/interval
   python fetch_prices_pe.py AAPL MSFT NVDA       # custom tickers
   python fetch_prices_pe.py AAPL --period 5y --interval 1mo
 """
@@ -46,13 +46,31 @@ def get_pe(tickers):
     return pd.DataFrame(rows).set_index("ticker")
 
 
+def ask(prompt, default):
+    """Prompt the user; empty answer keeps the default."""
+    answer = input(f"{prompt} [{default}]: ").strip()
+    return answer or default
+
+
+def prompt_for_inputs(args):
+    """Fill in args interactively when no tickers were given on the command line."""
+    raw = ask("Tickers (space or comma separated)", " ".join(DEFAULT_TICKERS))
+    args.tickers = raw.replace(",", " ").split()
+    args.period = ask("Period (1mo, 6mo, 1y, 5y, max, ...)", args.period)
+    args.interval = ask("Interval (1d, 1wk, 1mo, ...)", args.interval)
+    if not args.save:
+        args.save = ask("Save CSVs? (y/n)", "n").lower().startswith("y")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("tickers", nargs="*", default=DEFAULT_TICKERS)
+    ap.add_argument("tickers", nargs="*")
     ap.add_argument("--period", default="1y")
     ap.add_argument("--interval", default="1d")
     ap.add_argument("--save", action="store_true", help="write CSVs")
     args = ap.parse_args()
+    if not args.tickers:
+        prompt_for_inputs(args)
     tickers = [t.upper() for t in args.tickers]
 
     prices = get_prices(tickers, args.period, args.interval)
