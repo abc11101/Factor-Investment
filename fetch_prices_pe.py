@@ -1,23 +1,4 @@
-"""
-Retrieve stock prices and a set of factor / fundamental characteristics with yfinance.
-
-Usage:
-  python fetch_prices_pe.py                      # prompts for tickers only
-  python fetch_prices_pe.py AAPL MSFT NVDA       # custom tickers
-  python fetch_prices_pe.py AAPL --period 5y --interval 1mo --save
-
-Definitions (TTM = sum of last 4 quarters, falling back to the latest annual figure):
-  beta_36m        slope of 36 monthly returns on the S&P 500 (^GSPC)
-  mom_12m/6m      return from t-12m (t-6m) to t-1m, skipping the most recent month
-  ret_1m          return over the last 21 trading days
-  volatility      annualised std of daily returns, last 252 trading days
-  turnover        avg daily volume / shares outstanding, last 252 trading days
-  EV              market cap + total debt - cash & short-term investments
-  unlevered FCF   operating cash flow - capex + interest expense * (1 - tax rate)
-  net payout      dividends + buybacks - share issuance, over market cap
-"""
 import argparse
-
 import numpy as np
 import pandas as pd
 import yfinance as yf
