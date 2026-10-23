@@ -1,1 +1,1 @@
-print("We are cooked")sdfefqdfqfqdwqqwdqdq
+print("We are cooked")
