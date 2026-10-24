@@ -18,6 +18,8 @@ Fundamentals (TTM = trailing twelve months; balance-sheet items = latest)
   cfo_ttm, capex_ttm (positive number), d_nwc_ttm (increase in net working capital)
   div_ttm, buyback_ttm, issuance_ttm (all positive cash amounts)
   tax_rate (optional; falls back to `default_tax`)
+
+  testing commitment
 """
 import numpy as np
 import pandas as pd
